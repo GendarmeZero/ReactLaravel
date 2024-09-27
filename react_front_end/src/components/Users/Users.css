@@ -1,0 +1,23 @@
+
+  .btn_edit{
+    margin: 5px;
+   }
+  
+ 
+  .btn_delete {
+    background-color: red;
+    margin: 5px;
+  }
+ 
+  button {
+    padding: 10px 20px;
+    background-color: blue;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+ .btn_delete_it {
+  background-color: red;
+ }
