@@ -18,12 +18,19 @@ const NavbarHome = () => {
             <div className="collapse navbar-collapse">
                 <ul className="navbar-nav mx-auto">
                     <li className="nav-item">
-                        <Link className="nav-link" to="/home">Home</Link>
+                        <Link className="nav-link" to="/">Home</Link>
+                        <Link className="nav-link" to="/login">Login</Link>
                     </li>
-                    {/* Display Dashboard link if user is admin */}
-                    {user && user.role === 'admin' && (
+                    {/* Display Dashboard link for Managers */}
+                    {user && user.role === 'Managers' && (
                         <li className="nav-item">
-                            <Link className="nav-link" to="/dashboard">Dashboard</Link>
+                            <Link className="nav-link" to="/dashboard">Managers Dashboard</Link>
+                        </li>
+                    )}
+                    {/* Display Dashboard link for Supervisor */}
+                    {user && user.role === 'Supervisor' && (
+                        <li className="nav-item">
+                            <Link className="nav-link" to="/dashboard">Supervisor Dashboard</Link>
                         </li>
                     )}
                 </ul>

@@ -12,7 +12,7 @@ function NotFound() {
         <p className="text-gray-500 mb-4">
           It looks like you found a glitch in the matrix...
         </p>
-        <Link to="/home" className="btn btn-primary">
+        <Link to="/" className="btn btn-primary">
           &larr; Back to Home
         </Link>
       </div>

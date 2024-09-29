@@ -5,7 +5,7 @@ import { useAuth } from '../AuthContext/AuthContext';
 const Navbar = () => {
     const { logout, user } = useAuth(); // Access logout and user from context
     const navigate = useNavigate();
-
+// console.log("Current User:", user.role); // Debugging
     const handleLogout = () => {
         logout(); // Call the logout function
         navigate('/login'); // Navigate to login after logout
@@ -39,12 +39,12 @@ const Navbar = () => {
                     aria-expanded="false"
                 >
                     <span className="mr-2 d-none d-lg-inline text-black-600 small">
-                        {user ? user.name : "User"} {/* Display username */}
+                        {user ? user.name : "User"} : {user ? `(${user.role})` : "Role"} {/* Display username */}
                     </span>
                     <img
-                    style={{ width: "40px", height: "40px" }}
+                        style={{ width: "40px", height: "40px" }}
                         className="img-profile rounded-circle"
-                        src="img/undraw_profile.svg"
+                        src="img/undraw_profile_1.svg"
                         alt="Profile"
                     />
                 </button>
@@ -60,8 +60,6 @@ const Navbar = () => {
                     </li>
                 </ul>
             </div>
-
-
         </nav>
     );
 };

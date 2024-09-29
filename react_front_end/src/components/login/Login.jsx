@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link, useNavigate, Navigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useAuth } from '../AuthContext/AuthContext';
+import Navbar from "../Navhome/NavHome";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -32,10 +33,13 @@ const Login = () => {
                 text: "Welcome back!",
             }).then(() => {
                 // Redirect based on role
-                if (response.data.user.role === 'admin') {
-                    navigate("/dashboard");
+                const userRole = response.data.user.role;
+                if (userRole === 'Supervisor') {
+                    navigate("/dashboard"); // Redirect to Supervisor Dashboard
+                } else if (userRole === 'Managers') {
+                    navigate("/dashboard"); // Redirect to Managers Dashboard
                 } else {
-                    navigate("/home");
+                    navigate("/"); // Redirect to home for other roles
                 }
             });
         } catch (error) {
@@ -54,7 +58,7 @@ const Login = () => {
                     Swal.fire({
                         icon: "error",
                         title: "Error",
-                        text: responseData || "Registration failed.",
+                        text: responseData || "Login failed.",
                     });
                 }
             }
@@ -63,13 +67,20 @@ const Login = () => {
 
     // If user is already authenticated, redirect to the appropriate page
     if (user) {
-        return <Navigate to={user.role === 'admin' ? "/dashboard" : "/home"} />;
+        if (user.role === 'Supervisor') {
+            return <Navigate to="/dashboard" />; // Redirect to Supervisor Dashboard
+        } else if (user.role === 'Managers') {
+            return <Navigate to="/dashboard" />; // Redirect to Managers Dashboard
+        } else {
+            return <Navigate to="/home" />; // Redirect to home for other roles
+        }
     }
 
     const imagePath = process.env.PUBLIC_URL + '/images/bg-image.webp';
 
     return (
         <section className="vh-100 bg-image" style={{ backgroundImage: `url('${imagePath}')` }}>
+            <Navbar />
             <div className="mask d-flex align-items-center h-100 gradient-custom-3">
                 <div className="container h-100">
                     <div className="row d-flex justify-content-center align-items-center h-100">
@@ -99,7 +110,7 @@ const Login = () => {
                                             {validationErrors.password && <span className="text-danger">{validationErrors.password[0]}</span>}
                                         </div>
                                         <div className="d-flex justify-content-end">
-                                            <Link to="/forgotpassword">Forgot Password?</Link>
+                                            {/* <Link to="/forgotpassword">Forgot Password?</Link> */}
                                         </div>
                                         <button type="submit" className="btn btn-primary mt-4">Submit</button>
                                     </form>

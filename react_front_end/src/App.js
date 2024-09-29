@@ -19,6 +19,9 @@ import Unauthorized from './components/unauthorized/unauthorized';
 import NotFound from './components/NotFound/NotFound';
 
 function App() {
+    const currentUser = {
+        role: 'Managers', // You can change this to 'Users' or another role to test
+      };
     return (
         <AuthProvider>
             <div id="wrapper">
@@ -29,18 +32,19 @@ function App() {
                         <Route path='/login' element={<Login />} />
                         {/* <Route path="/email-verification" element={<EmailVerification />} /> */}
                         <Route path="/unauthorized" element={<Unauthorized />} />
+                        <Route path="/" element={<Home />} />
 
                         {/* Protected Routes */}
                         <Route path="/forgotpassword" element={<ProtectedRoute><ForgotPassword /></ProtectedRoute>} />
                         <Route path='/changepassword' element={<ProtectedRoute><ChangePassword /></ProtectedRoute>} />
                         <Route path='/profile' element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-                        <Route path='/home' element={<ProtectedRoute><Home /></ProtectedRoute>} />
+                        {/* <Route path='/home' element={<ProtectedRoute><Home /></ProtectedRoute>} /> */}
                         
-                        {/* Admin Protected Routes */}
-                        <Route path='/dashboard' element={<ProtectedRoute requiredRole="admin"><Dashboard /></ProtectedRoute>} />
-                        <Route path='/dashboard' element={<ProtectedRoute requiredRole="admin"><Dashboard /></ProtectedRoute>} />
-                        <Route path="/users" element={<ProtectedRoute requiredRole="admin"><UsersTable /></ProtectedRoute>} />
-                        <Route path="/contacts" element={<ProtectedRoute requiredRole="admin"><Contacts /></ProtectedRoute>} />
+                        {/* Managers and Supervisors Protected Routes */}
+                        <Route path='/dashboard' element={<ProtectedRoute requiredRole="Managers"><Dashboard /></ProtectedRoute>} />
+                        <Route path='/dashboard/supervisor' element={<ProtectedRoute requiredRole="Supervisor"><Dashboard /></ProtectedRoute>} />
+                        <Route path="/users" element={<ProtectedRoute requiredRole="Managers"><UsersTable /></ProtectedRoute>} />
+                        <Route path="/contacts" element={<ProtectedRoute requiredRole="Managers"><Contacts userRole={currentUser.role} /></ProtectedRoute>} />
 
                         {/* Catch-all Route for 404 */}
                         <Route path="*" element={<NotFound />} />
@@ -52,4 +56,3 @@ function App() {
 }
 
 export default App;
-

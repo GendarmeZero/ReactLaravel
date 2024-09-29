@@ -14,7 +14,7 @@ class AdminMiddleware
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle($request, Closure $next) {
-        if (auth()->user()->role !== 'admin') {
+        if (auth()->user()->role !== 'Managers') {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
         return $next($request);
