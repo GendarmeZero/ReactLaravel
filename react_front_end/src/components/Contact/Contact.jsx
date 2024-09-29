@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { MdDelete } from "react-icons/md";
-import { FaEdit } from "react-icons/fa";
 import axios from "axios";
 import Footer from "../Footer/Footer";
 import Sidebar from "../Sidebar/Sidebar";
 import Nav from "../Navbar/Nav";
+import { useAuth } from '../AuthContext/AuthContext';
 
-const Contacts = () => {
+const Contacts = ({ userRole }) => {
   const [contacts, setContacts] = useState([]);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -16,10 +16,11 @@ const Contacts = () => {
   const [editingContact, setEditingContact] = useState(null);
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const { user } = useAuth(); // Access logout and user from context
 
   useEffect(() => {
     fetchContacts();
-  }, []);
+  }, [userRole]);
 
   const fetchContacts = async () => {
     try {
@@ -82,7 +83,9 @@ const Contacts = () => {
 
       Swal.fire({
         title: editingContact ? "Updated!" : "Added!",
-        text: `Contact has been ${editingContact ? "updated" : "added"} successfully.`,
+        text: `Contact has been ${
+          editingContact ? "updated" : "added"
+        } successfully.`,
         icon: "success",
       });
 
@@ -150,7 +153,11 @@ const Contacts = () => {
   if (error) {
     return <div>Error: {error.message}</div>;
   } else if (!isLoaded) {
-    return <div>Loading...</div>;
+    return (
+      <div className="spinner-border text-primary" role="status">
+        <span className="visually-hidden">Loading...</span>
+      </div>
+    );
   } else {
     return (
       <div id="page-top">
@@ -166,73 +173,33 @@ const Contacts = () => {
                   </h6>
                 </div>
                 <div className="card-body">
-                  <form onSubmit={handleSubmit} className="mb-4">
-                    <h2 className="main mb-3">
-                      {editingContact ? "Edit Contact" : "Add Contact"}
-                    </h2>
-                    <div className="form-group">
-                      <label htmlFor="name">Name:</label>
-                      <input
-                        type="text"
-                        name="name"
-                        value={name}
-                        onChange={handleInputChange}
-                        className="form-control"
-                        required
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label htmlFor="email">Email:</label>
-                      <input
-                        type="email"
-                        name="email"
-                        value={email}
-                        onChange={handleInputChange}
-                        className="form-control"
-                        required
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label htmlFor="subject">Subject:</label>
-                      <input
-                        type="text"
-                        name="subject"
-                        value={subject}
-                        onChange={handleInputChange}
-                        className="form-control"
-                        required
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label htmlFor="message">Message:</label>
-                      <textarea
-                        name="message"
-                        value={message}
-                        onChange={handleInputChange}
-                        className="form-control"
-                        required
-                      />
-                    </div>
-                    <div className="text-center">
-                      <button type="submit" className="btn btn-primary btn-lg mx-2">
-                        {editingContact ? "Update Contact" : "Add Contact"}
-                      </button>
-                    </div>
-                  </form>
-
                   <h2 className="main mb-3">All Contacts</h2>
                   <div className="table-responsive">
-                    <table className="table table-bordered" style={{ width: "100%" }}>
+                    <table
+                      className="table table-bordered"
+                      style={{ width: "100%" }}
+                    >
                       <thead>
                         <tr>
-                          <th>ID</th>
-                          <th>Name</th>
-                          <th>Email</th>
-                          <th>Subject</th>
-                          <th>Message</th>
-                          <th>Actions</th>
+                          <th>
+                            <h5>ID</h5>
+                          </th>
+                          <th>
+                            <h5>Name</h5>
+                          </th>
+                          <th>
+                            <h5>Email</h5>
+                          </th>
+                          <th>
+                            <h5>Subject</h5>
+                          </th>
+                          <th>
+                            <h5>Message</h5>
+                          </th>
+                          {user.role === "Managers" && <th>Actions</th>}
                         </tr>
                       </thead>
+
                       <tbody>
                         {Array.isArray(contacts) && contacts.length > 0 ? (
                           contacts.map((contact) => (
@@ -242,25 +209,25 @@ const Contacts = () => {
                               <td>{contact?.email}</td>
                               <td>{contact?.subject}</td>
                               <td>{contact?.message}</td>
-                              <td className="text-center">
-                                <button
-                                  className="btn_edit"
-                                  onClick={() => handleEdit(contact)}
-                                >
-                                  <FaEdit />
-                                </button>
-                                <button
-                                  className="btn_delete"
-                                  onClick={() => handleDelete(contact.id)}
-                                >
-                                  <MdDelete />
-                                </button>
-                              </td>
+
+                              {/* Render delete button based on user role */}
+                              {user.role === "Managers" && (
+                                <td className="text-center">
+                                  <button
+                                    className="btn_delete"
+                                    onClick={() => handleDelete(contact.id)}
+                                  >
+                                    <MdDelete />
+                                  </button>
+                                </td>
+                              )}
                             </tr>
                           ))
                         ) : (
                           <tr>
-                            <td colSpan="6">No contacts found</td>
+                            <td colSpan={userRole === "Managers" ? 6 : 5}>
+                              No contacts found
+                            </td>
                           </tr>
                         )}
                       </tbody>
@@ -269,7 +236,7 @@ const Contacts = () => {
                 </div>
               </div>
             </div>
-        <Footer />
+            <Footer />
           </div>
         </div>
       </div>

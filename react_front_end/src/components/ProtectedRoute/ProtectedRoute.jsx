@@ -4,21 +4,18 @@ import { useAuth } from '../AuthContext/AuthContext'; // Adjust the import path 
 
 const ProtectedRoute = ({ children, requiredRole }) => {
     const { user } = useAuth();
-    // console.log("Current User:", user); // For debugging
+    // console.log("Current User:", user); // Debugging
 
     if (!user) {
-        // If no user is logged in, redirect to login
         return <Navigate to="/login" />;
     }
 
-    if (requiredRole && user.role !== requiredRole) {
-        // If user role does not match requiredRole, redirect to unauthorized
+    if (Array.isArray(requiredRole) && !requiredRole.includes(user.role)) {
         return <Navigate to="/unauthorized" />;
     }
 
-    // If user is authenticated and has the required role, render the children
     return children;
 };
 
-export default ProtectedRoute;
 
+export default ProtectedRoute;

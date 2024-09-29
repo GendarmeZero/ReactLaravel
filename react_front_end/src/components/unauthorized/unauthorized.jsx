@@ -15,7 +15,7 @@ function Unauthorized() {
         </p>
         {/* Uncomment and replace the path below with your unauthorized illustration image */}
         {/* <img src="path/to/unauthorized-illustration.png" alt="Unauthorized Access" className="img-fluid mb-4" /> */}
-        <Link to="/home" className="btn btn-primary btn-lg">
+        <Link to="/" className="btn btn-primary btn-lg">
           &larr; Back to Home
         </Link>
       </div>

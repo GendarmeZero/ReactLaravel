@@ -24,7 +24,7 @@ class UserFactory extends Factory
             'email_verification_token' => fake()->randomNumber(8), // No token when verified
             'email_verified' => true, // Mark as verified
             'password' => fake()->password(), // Password
-            'role' => fake()->randomElement(['user', 'admin']), // Randomly assign role
+            'role' => fake()->randomElement(['user', 'Managers','Supervisor','Teacher']), // Randomly assign role
             'remember_token' => Str::random(10),
         ];
     }

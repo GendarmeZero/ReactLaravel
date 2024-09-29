@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../AuthContext/AuthContext"; // Assuming you have an AuthContext to provide user info
 
 export default function Sidebar() {
   // State to manage the sidebar toggle
   const [isOpen, setIsOpen] = useState(true);
+
+  // Access user data from the authentication context
+  const { user } = useAuth();
 
   // Function to toggle the sidebar
   const toggleSidebar = () => {
@@ -34,36 +38,56 @@ export default function Sidebar() {
         {/* Divider */}
         <hr className="sidebar-divider my-0" />
 
-        {/* Nav Items */}
-        <li className="nav-item">
-          <Link className="nav-link" to="/dashboard">
-            <i className="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span>
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link" to="/users">
-            <i className="fas fa-fw fa-users"></i>
-            <span>Users</span>
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link" to="/contacts">
-            <i className="fas fa-fw fa-users"></i>
-            <span>Contacts</span>
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link" to="/home">
-            <i className="fas fa-fw fa-users"></i>
-            <span>home</span>
-          </Link>
-        </li>
+        {/* Conditional Dashboard Link - Visible for Managers and Supervisors */}
+        {user && (
+          <>
+            {user.role === "Supervisor" && (
+              <li className="nav-item">
+                <Link className="nav-link" to="/dashboard/supervisor">
+                  <i className="fas fa-fw fa-tachometer-alt"></i>
+                  <span>supervisor Dashboard</span>
+                </Link>
+              </li>
+            )}
+            {user.role === "Managers" && (
+              <li className="nav-item">
+                <Link className="nav-link" to="/dashboard">
+                  <i className="fas fa-fw fa-tachometer-alt"></i>
+                  <span>Dashboard</span>
+                </Link>
+              </li>
+            )}
+          </>
+        )}
+
+        {/* Links for Managers or Admins */}
+        {user && user.role !== "Supervisor"  && (
+          <>
+            <li className="nav-item">
+              <Link className="nav-link" to="/users">
+                <i className="fas fa-fw fa-users"></i>
+                <span>Users</span>
+              </Link>
+            </li>
+          </>
+        )}
+            <li className="nav-item">
+              <Link className="nav-link" to="/contacts">
+                <i className="fas fa-fw fa-address-book"></i>
+                <span>Contacts</span>
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/">
+                <i className="fas fa-fw fa-home"></i>
+                <span>Home</span>
+              </Link>
+            </li>
 
         {/* Sidebar Toggler */}
         <div className="text-center d-flex d-md-inline">
           <button
-            className=" rounded-circle border-0"
+            className="rounded-circle border-0"
             id="sidebarToggle"
             onClick={toggleSidebar} // Toggle the sidebar on click
           ></button>
