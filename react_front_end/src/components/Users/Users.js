@@ -16,15 +16,15 @@ const Users = () => {
   const [editingUser, setEditingUser] = useState(null);
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
-
+  const [effect, setEffect] = useState(0);
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, [effect]);
 
   const fetchUsers = async () => {
     try {
       const response = await axios.get("http://127.0.0.1:8000/api/users");
-      console.log("Fetched users:", response.data); // Log the response
+      console.log("Fetched users:", response.data);
       setUsers(response.data);
       setIsLoaded(true);
     } catch (error) {
@@ -87,11 +87,7 @@ const Users = () => {
         } successfully.`,
         icon: "success",
       });
-
-      setEditingUser(null);
-      setName("");
-      setEmail("");
-      setPassword("");
+      setEffect(1);
     } catch (error) {
       console.error("Error submitting the form!", error);
       Swal.fire({
@@ -101,12 +97,11 @@ const Users = () => {
       });
     }
   };
-
   const handleEdit = (user) => {
     setEditingUser(user);
     setName(user.name);
     setEmail(user.email);
-    setPassword(""); // Reset password field when editing
+    setPassword("");
   };
 
   const handleDelete = (userId) => {
@@ -222,6 +217,7 @@ const Users = () => {
                           <th>ID</th>
                           <th>Name</th>
                           <th>Email</th>
+                          <th>role</th>
                           <th>Actions</th>
                         </tr>
                       </thead>
@@ -234,6 +230,7 @@ const Users = () => {
                               <td>{user?.id}</td>
                               <td>{user?.name}</td>
                               <td>{user?.email}</td>
+                              <td>{user?.role}</td>
                               <td className="text-center">
                                 <button
                                   className="btn_edit"

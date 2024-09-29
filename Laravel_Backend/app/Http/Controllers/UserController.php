@@ -27,7 +27,7 @@ class UserController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => bcrypt($request->password),
+            'password' => ($request->password),
         ]);
     
         // Return a JSON response indicating success
@@ -37,7 +37,6 @@ class UserController extends Controller
         ], 201);
     }
     
-
     // Method to update an existing user
     public function update(Request $request, $id)
     {

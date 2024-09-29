@@ -20,8 +20,11 @@ class UserFactory extends Factory
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'email_verified_at' => now(), // Set to now() to mark as verified by default
+            'email_verification_token' => fake()->randomNumber(8), // No token when verified
+            'email_verified' => true, // Mark as verified
+            'password' => fake()->password(), // Password
+            'role' => fake()->randomElement(['user', 'admin']), // Randomly assign role
             'remember_token' => Str::random(10),
         ];
     }
@@ -34,7 +37,9 @@ class UserFactory extends Factory
     public function unverified(): static
     {
         return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
+            'email_verified_at' => null, // Unverified
+            'email_verification_token' => Str::random(40), // Generate a random token for email verification
+            'email_verified' => false, // Mark as not verified
         ]);
     }
 }

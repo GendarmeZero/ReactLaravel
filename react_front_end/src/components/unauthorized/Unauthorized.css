@@ -1,0 +1,50 @@
+body {
+    background-color: #f8f9fa; /* Light background for the page */
+  }
+  
+  .unauthorized {
+    font-size: 10rem;
+    font-weight: bold;
+    color: #5a5c69; /* Different color for unauthorized */
+    position: relative;
+    line-height: 1;
+  }
+  
+  .unauthorized::before {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: -1;
+    color: rgba(0, 0, 0, 0.1);
+    font-size: 15rem; /* Larger background text */
+  }
+  
+  /* Updated button styles */
+  .btn-success {
+    background-color: #0d6efd; /* Updated button color */
+    border-color: #0d6efd; /* Updated border color */
+  }
+  
+  .btn-success:hover {
+    background-color: #0b5ed7; /* Darker shade for hover effect */
+    border-color: #0a58ca; /* Darker border for hover effect */
+  }
+  
+  /* Add some transitions for a smoother effect */
+  .animated {
+    animation: fadeIn 1s ease-in;
+  }
+  
+  /* Keyframes for fadeIn animation */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
