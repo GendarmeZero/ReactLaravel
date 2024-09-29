@@ -1,3 +1,4 @@
+
 <?php
 
 return [
@@ -17,17 +18,18 @@ return [
 
     'paths' => ['api/*', 'sanctum/csrf-cookie'],
 
-    'allowed_methods' => ['*'], // Allow all HTTP methods (GET, POST, PUT, DELETE, etc.)
+    'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['http://localhost:3000'], // Allow the React app running on this origin
+    'allowed_origins' => ['*'],
 
     'allowed_origins_patterns' => [],
 
-    'allowed_headers' => ['*'], // Allow all headers (authorization, content-type, etc.)
+    'allowed_headers' => ['*'],
 
     'exposed_headers' => [],
 
     'max_age' => 0,
 
-    'supports_credentials' => true, // Set to true if you need to send cookies or authorization headers
+    'supports_credentials' => false,
+
 ];

@@ -7,8 +7,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Str;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable
+
+class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -21,6 +24,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'email_verified_at',
+        'email_verification_token',
+        'email_verified'
     ];
 
     /**
@@ -40,5 +46,34 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'password' => 'hashed',
     ];
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [
+            'email'=>$this->email,
+            'name'=>$this->name
+        ];
+    }
+
+    public function emailverification(){
+        $email = $this->email;
+        $token = Str::random(40);
+        $user = User::where('email',$email)->first();
+
+        $user->update(['email_verification_token' => $token]);
+        $link = env('Front_url').'email-verification?token='.$token;
+        Maill::send([],[],function($message) use($email, $link){
+            $message->to($email)
+                    ->subject("Verify Your Email Address")
+                    ->html("<p>Verify Your Email</p><br/><a href='".$link."'>Verify Email Address</a>");
+        });
+        return $link;
+    }
 }

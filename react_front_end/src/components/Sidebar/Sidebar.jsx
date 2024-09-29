@@ -36,7 +36,7 @@ export default function Sidebar() {
 
         {/* Nav Items */}
         <li className="nav-item">
-          <Link className="nav-link" to="/">
+          <Link className="nav-link" to="/dashboard">
             <i className="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span>
           </Link>
@@ -51,6 +51,12 @@ export default function Sidebar() {
           <Link className="nav-link" to="/contacts">
             <i className="fas fa-fw fa-users"></i>
             <span>Contacts</span>
+          </Link>
+        </li>
+        <li className="nav-item">
+          <Link className="nav-link" to="/home">
+            <i className="fas fa-fw fa-users"></i>
+            <span>home</span>
           </Link>
         </li>
 
