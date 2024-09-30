@@ -5,7 +5,7 @@ import axios from "axios";
 import Footer from "../Footer/Footer";
 import Sidebar from "../Sidebar/Sidebar";
 import Nav from "../Navbar/Nav";
-import { useAuth } from '../AuthContext/AuthContext';
+import { useAuth } from "../AuthContext/AuthContext";
 
 const Contacts = ({ userRole }) => {
   const [contacts, setContacts] = useState([]);
@@ -16,7 +16,10 @@ const Contacts = ({ userRole }) => {
   const [editingContact, setEditingContact] = useState(null);
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const { user } = useAuth(); // Access logout and user from context
+  const { user } = useAuth();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [contactsPerPage, setContactsPerPage] = useState(5); // Default contacts per page
 
   useEffect(() => {
     fetchContacts();
@@ -150,6 +153,19 @@ const Contacts = ({ userRole }) => {
     });
   };
 
+  // Pagination logic
+  const indexOfLastContact = currentPage * contactsPerPage;
+  const indexOfFirstContact = indexOfLastContact - contactsPerPage;
+  const currentContacts = contacts
+    .filter(
+      (contact) =>
+        contact.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        contact.email.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .slice(indexOfFirstContact, indexOfLastContact);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   if (error) {
     return <div>Error: {error.message}</div>;
   } else if (!isLoaded) {
@@ -174,6 +190,45 @@ const Contacts = ({ userRole }) => {
                 </div>
                 <div className="card-body">
                   <h2 className="main mb-3">All Contacts</h2>
+
+                  {/* Search Bar */}
+                  <div className="d-flex justify-content-between align-items-center mb-3">
+                    {/* Search Bar */}
+                    <input
+                      type="text"
+                      className="form-control me-3" // 'me-3' adds margin between the input and dropdown
+                      placeholder="Search by name or email"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      style={{ width: "700px" }} // Adjust width as needed
+                    />
+
+                    {/* Users per page dropdown */}
+                    <div className="me-2">
+                    <label   className="form-label mb-0"
+                          style={{ marginBottom: "14px" }}
+                          htmlFor="contactsPerPage"
+                        >
+                          Users per page:
+                        </label>
+                        <select
+                          id="contactsPerPage"
+                          value={contactsPerPage}
+                          onChange={(e) =>
+                            setContactsPerPage(Number(e.target.value))
+                          }
+                          className="form-select"
+                          style={{ width: "100px", marginBottom: "14px" }} // Adjust width as needed
+                        >
+                          <option value={5}>5</option>
+                          <option value={10}>10</option>
+                          <option value={15}>15</option>
+                          <option value={20}>20</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
                   <div className="table-responsive">
                     <table
                       className="table table-bordered"
@@ -181,36 +236,23 @@ const Contacts = ({ userRole }) => {
                     >
                       <thead>
                         <tr>
-                          <th>
-                            <h5>ID</h5>
-                          </th>
-                          <th>
-                            <h5>Name</h5>
-                          </th>
-                          <th>
-                            <h5>Email</h5>
-                          </th>
-                          <th>
-                            <h5>Subject</h5>
-                          </th>
-                          <th>
-                            <h5>Message</h5>
-                          </th>
+                          <th>ID</th>
+                          <th>Name</th>
+                          <th>Email</th>
+                          <th>Subject</th>
+                          <th>Message</th>
                           {user.role === "Managers" && <th>Actions</th>}
                         </tr>
                       </thead>
-
                       <tbody>
-                        {Array.isArray(contacts) && contacts.length > 0 ? (
-                          contacts.map((contact) => (
+                        {currentContacts.length > 0 ? (
+                          currentContacts.map((contact) => (
                             <tr key={contact?.id}>
                               <td>{contact?.id}</td>
                               <td>{contact?.name}</td>
                               <td>{contact?.email}</td>
                               <td>{contact?.subject}</td>
                               <td>{contact?.message}</td>
-
-                              {/* Render delete button based on user role */}
                               {user.role === "Managers" && (
                                 <td className="text-center">
                                   <button
@@ -232,15 +274,42 @@ const Contacts = ({ userRole }) => {
                         )}
                       </tbody>
                     </table>
+
+                    {/* Pagination */}
+                    <nav>
+                      <ul className="pagination justify-content-end">
+                        {Array.from(
+                          {
+                            length: Math.ceil(
+                              contacts.length / contactsPerPage
+                            ),
+                          },
+                          (_, i) => (
+                            <li
+                              key={i}
+                              className={`page-item ${
+                                currentPage === i + 1 ? "active" : ""
+                              }`}
+                            >
+                              <button
+                                onClick={() => paginate(i + 1)}
+                                className="page-link"
+                              >
+                                {i + 1}
+                              </button>
+                            </li>
+                          )
+                        )}
+                      </ul>
+                    </nav>
                   </div>
                 </div>
               </div>
+            <Footer />    
             </div>
-            <Footer />
           </div>
         </div>
-      </div>
-    );
+     );
   }
 };
 

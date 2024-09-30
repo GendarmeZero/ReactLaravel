@@ -36,6 +36,9 @@ const Login = () => {
                 const userRole = response.data.user.role;
                 if (userRole === 'Supervisor') {
                     navigate("/dashboard"); // Redirect to Supervisor Dashboard
+                }
+                else if (userRole === 'Teacher') {
+                    navigate("/dashboard"); // Redirect to Supervisor Dashboard
                 } else if (userRole === 'Managers') {
                     navigate("/dashboard"); // Redirect to Managers Dashboard
                 } else {
@@ -69,7 +72,10 @@ const Login = () => {
     if (user) {
         if (user.role === 'Supervisor') {
             return <Navigate to="/dashboard" />; // Redirect to Supervisor Dashboard
-        } else if (user.role === 'Managers') {
+        } else if (user.role === 'Teacher') {
+            return <Navigate to="/dashboard" />; // Redirect to Supervisor Dashboard
+        }
+         else if (user.role === 'Managers') {
             return <Navigate to="/dashboard" />; // Redirect to Managers Dashboard
         } else {
             return <Navigate to="/home" />; // Redirect to home for other roles

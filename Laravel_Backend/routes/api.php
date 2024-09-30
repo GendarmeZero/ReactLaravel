@@ -5,11 +5,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\ForgotPasswordController;
 
 // Middleware for JWT Authentication
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::post('/forgotpassword', [ForgotPasswordController::class, 'sendResetLink']);
 
 // Register API routes
 // Route::post('/register', [AuthController::class, 'register']);

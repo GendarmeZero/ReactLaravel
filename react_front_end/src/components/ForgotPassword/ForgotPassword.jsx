@@ -3,11 +3,11 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
-
 const ForgotPassword = () => {
     const [email, setEmail] = useState("");
     const [validationErrors, setValidationErrors] = useState({});
     const navigate = useNavigate();
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -20,31 +20,27 @@ const ForgotPassword = () => {
         try {
             const response = await axios.post("http://127.0.0.1:8000/api/forgotpassword", { email });
             setEmail("");
-            
-            if (response.data.status == "success") {
+
+            if (response.data.status === "success") {
                 Swal.fire({
                     icon: "success",
                     title: "Reset Password",
-                    text: "New Password Send your EMail.",
-                }).then(()=>{
-                    setEmail("");
-                    setValidationErrors({});
+                    text: "A password reset email has been sent to your email.",
+                }).then(() => {
                     navigate('/login');
                 });
-                
-                
             } else {
                 Swal.fire({
                     icon: "error",
                     title: "Password Reset Failed",
-                    text: response.data.message || "An error occurred while processing your request. Please try again later.",
+                    text: response.data.message || "An error occurred. Please try again.",
                 });
             }
         } catch (error) {
             Swal.fire({
                 icon: "error",
                 title: "Password Reset Failed",
-                text: "An error occurred while processing your request. Please try again later.",
+                text: error.response?.data?.message || "An unexpected error occurred. Please try again.",
             });
         }
     };
@@ -76,12 +72,22 @@ const ForgotPassword = () => {
                                     <h2 className="text-uppercase text-center mb-5">Reset Password</h2>
                                     <form onSubmit={handleSubmit}>
                                         <div className="form-outline mb-4">
-                                            <input type="text" name="email" placeholder="Enter Email" className="form-control" value={email} onChange={handleChange} />
+                                            <input
+                                                type="email"
+                                                name="email"
+                                                placeholder="Enter Email"
+                                                className="form-control"
+                                                value={email}
+                                                onChange={handleChange}
+                                                required
+                                            />
                                             {validationErrors.email && <span className="text-danger">{validationErrors.email}</span>}
                                         </div>
                                         <button type="submit" className="btn btn-primary mt-4">Submit</button>
                                     </form>
-                                    <p className="text-center text-muted mt-5 mb-0">Go to Login? <a href="/login" className="fw-bold text-body"><u>Login here</u></a></p>
+                                    <p className="text-center text-muted mt-5 mb-0">
+                                        Go to Login? <a href="/login" className="fw-bold text-body"><u>Login here</u></a>
+                                    </p>
                                 </div>
                             </div>
                         </div>
