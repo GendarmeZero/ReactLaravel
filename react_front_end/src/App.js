@@ -28,18 +28,17 @@ function App() {
                 <div id="content-wrapper">
                     <Routes>
                         {/* Public Routes */}
+                        {/* <Route path="/email-verification" element={<EmailVerification />} /> */}
                         <Route path='/register' element={<Register />} />
                         <Route path='/login' element={<Login />} />
-                        {/* <Route path="/email-verification" element={<EmailVerification />} /> */}
                         <Route path="/unauthorized" element={<Unauthorized />} />
                         <Route path="/" element={<Home />} />
+                        <Route path="/forgotpassword" element={<ForgotPassword />} />
 
                         {/* Protected Routes */}
-                        <Route path="/forgotpassword" element={<ProtectedRoute><ForgotPassword /></ProtectedRoute>} />
                         <Route path='/changepassword' element={<ProtectedRoute><ChangePassword /></ProtectedRoute>} />
                         <Route path='/profile' element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-                        {/* <Route path='/home' element={<ProtectedRoute><Home /></ProtectedRoute>} /> */}
-                        
+                         
                         {/* Managers and Supervisors Protected Routes */}
                         <Route path='/dashboard' element={<ProtectedRoute requiredRole="Managers"><Dashboard /></ProtectedRoute>} />
                         <Route path='/dashboard/supervisor' element={<ProtectedRoute requiredRole="Supervisor"><Dashboard /></ProtectedRoute>} />

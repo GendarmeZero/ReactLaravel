@@ -53,15 +53,16 @@ export default function Sidebar() {
               <li className="nav-item">
                 <Link className="nav-link" to="/dashboard">
                   <i className="fas fa-fw fa-tachometer-alt"></i>
-                  <span>Dashboard</span>
+                  <span>Managers Dashboard</span>
                 </Link>
               </li>
             )}
+ 
           </>
         )}
 
         {/* Links for Managers or Admins */}
-        {user && user.role !== "Supervisor"  && (
+        {user && user.role !== "Supervisor"  && user.role !== "Teacher" && (
           <>
             <li className="nav-item">
               <Link className="nav-link" to="/users">
@@ -71,12 +72,25 @@ export default function Sidebar() {
             </li>
           </>
         )}
+        {/* {user && user.role !== "Supervisor" && (
+          <>
+            <li className="nav-item">
+              <Link className="nav-link" to="/teachers">
+                <i className="fas fa-fw fa-user"></i>
+                <span>Teachers</span>
+              </Link>
+            </li>
+          </>
+        )} */}
+        {user && user.role !== "Teacher" && (
+          
             <li className="nav-item">
               <Link className="nav-link" to="/contacts">
                 <i className="fas fa-fw fa-address-book"></i>
                 <span>Contacts</span>
               </Link>
             </li>
+        )}
             <li className="nav-item">
               <Link className="nav-link" to="/">
                 <i className="fas fa-fw fa-home"></i>

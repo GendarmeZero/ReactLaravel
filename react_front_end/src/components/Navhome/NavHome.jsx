@@ -33,6 +33,11 @@ const NavbarHome = () => {
                             <Link className="nav-link" to="/dashboard">Supervisor Dashboard</Link>
                         </li>
                     )}
+                    {user && user.role === 'Teacher' && (
+                        <li className="nav-item">
+                            <Link className="nav-link" to="/dashboard">Teacher Dashboard</Link>
+                        </li>
+                    )}
                 </ul>
             </div>
 
